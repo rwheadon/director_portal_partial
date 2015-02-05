@@ -1,0 +1,10 @@
+<p class="organization_fields">
+	<fieldset>	
+		<div class="field">
+	  		<%= f.label :name %><br />
+	  		<%= f.text_field :name, :size=>100, :placeholder => "Enter the congregation or organization camper is with" %>
+			<%= f.hidden_field :_destroy %>
+			<%= link_to  image_tag("gemicons/trashcan.png"), '#', class: "remove_fields" %>
+		</div>	
+	</fieldset>
+</p>

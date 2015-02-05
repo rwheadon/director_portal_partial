@@ -1,0 +1,27 @@
+<% if @person.requirement_progress<100 %>
+	<% progressnum = @person.requirement_progress %>
+	  <script>
+	  $(function() {
+	    $( "#progressbar" ).progressbar({
+	      value: <%= progressnum %>
+	    });
+	  });
+	  </script>
+	<div id="things_to_complete">
+		<p><b>Things to be done before your registration is complete</b>
+		<% unless @person.person_basics_complete? %><br/><b>Attendee Info Tab:</b> The Camper's First Name, Last Name, Gender and Birthdate are required<% end %>
+		<% unless @person.person_has_valid_address? %><br/><b>Attendee Info Tab:</b> The Camper's Address is required.<% end %>
+		<% unless @person.person_has_organization? %><br/><b>Attendee Info Tab:</b> A Church/Organization is required.<% end %>
+		<% unless @person.person_has_email? %><br/><b>Attendee Info Tab:</b> The Camper's email is required.<% end %>
+		<% unless @person.person_has_parent? %><br/><b>Contacts Tab:</b> Required: Parent or Guardian contact with name, relationship, at least one email, two phone numbers and primary insurance.<% end %>
+		<% unless @person.person_has_emergency_contact? %><br/><b>Contacts Tab:</b> Required: Two Emergency contacts with name, relationship, at least one email and two phone numbers each.<% end %>
+		<% unless @person.person_has_pickup? %><br/><b>Contacts Tab:</b> Required: Two Pick-Up contacts with Name, relationship and two phone numbers each.<% end %>
+		<% unless @person.person_has_contact_with_insurance? %><br/><b>Contacts Tab:</b> A Contact with primary insurance info is required.<% end %>
+		<% unless @person.person_important_contacts_have_email? %><br/><b>Contacts Tab:</b> Parent, Guardian and Emergency contacts must have at least one email.<% end %>
+		<% unless @person.person_contacts_have_phones? %><br/><b>Contacts Tab:</b> Every Contact must have at least two phone numbers.<% end %>
+		</p>
+		<div id="progressbar"><span><%= progressnum %>% Complete</span></div>
+	</div>
+<% else %>
+	<div>All required fields are complete.</div>
+<% end %>

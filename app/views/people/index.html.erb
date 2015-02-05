@@ -1,0 +1,39 @@
+
+<h1>Campers</h1>
+<!-- = link_to "Go Back to Main Page", root_path % -->
+<br/>
+<% if @people.empty? %>
+
+	<h2> You haven't created any campers yet</h2><br/>
+	<p>Creating campers is your first task. <br/>Nothing else can be done until the camper record is 100% complete</p>
+
+<% else %>		
+	<table id="people_index" class="display">
+		<thead>
+			<tr>
+				<th>Firstname</th>
+				<th>Lastname</th>
+				<th>Middleinit</th>
+				<th>Birthdate</th>
+				<th>Nickname</th>
+				<th>Gender</th>
+				<th>Date created</th>
+				<th>Pct Complete</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @people.each do |person| %>
+			  <tr>
+			    <td><%= link_to person.firstname, person %></td>
+			    <td><%= link_to person.lastname, person %></td>
+			    <td><%= person.middleinit %></td>
+			    <td><%= person.birthdate %></td>
+			    <td><%= person.nickname %></td>
+			    <td><%= person.gender %></td>
+			    <td><%= person.created_at.in_time_zone("Eastern Time (US & Canada)")%></td>
+				<td><%= person.pct_complete %></td>
+			  </tr>
+			<% end %>
+		</tbody>
+	</table>
+<% end %>

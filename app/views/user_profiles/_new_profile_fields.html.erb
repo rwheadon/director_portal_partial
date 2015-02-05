@@ -1,0 +1,9 @@
+<% @users_available = User.where( "role in (?)", ['director','registrar','admin']).count > 0 %>
+<div class="field">
+	<% if @users_available %>
+		<%= f.label 'User Profile' %><br />
+		<%= f.collection_select(:user_id, User.where( role: ['director','registrar','admin']), :id, :email ) %>
+	<% else %>
+		No users have roles that allow access to this portal
+	<% end %>
+</div>

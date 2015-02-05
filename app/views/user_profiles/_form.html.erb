@@ -1,0 +1,59 @@
+<%= form_for(@user_profile) do |f| %>
+  <% if @user_profile.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user_profile.errors.count, "error") %> prohibited this user_profile from being saved:</h2>
+
+      <ul>
+      <% @user_profile.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+	<% if @user_profile.new_record? %>
+		<% @users_available = User.where( "role in (?)", ['director','registrar','admin']).count > 0 %>
+		<div class="field">
+			<% if @users_available %>
+				<%= f.label 'User Profile' %><br />
+				<%= f.collection_select(:user_id, User.where( role: ['director','registrar','admin']), :id, :email ) %>
+			<% else %>
+				No users have roles that allow access to this portal
+			<% end %>
+		</div>
+	<% else %>
+		<%= render 'saved_profile_fields' %>
+	<% end %>
+
+  <!-- div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.number_field :user_id %>
+  </div -->
+  <div class="field">
+    <b>Is Active: </b>
+    <%= f.check_box :is_active %>
+  </div>
+  <!-- div class="field">
+    <%= f.label :is_deleted %><br />
+    <%= f.check_box :is_deleted %>
+  </div -->
+  <div class="field">
+    <%= f.label :firstname %><br />
+    <%= f.text_field :firstname %>
+  </div>
+  <div class="field">
+    <%= f.label :lastname %><br />
+    <%= f.text_field :lastname %>
+  </div>
+  <div class="read_only_field">
+	  <b>Staff context:</b>
+	  <%= @user_profile.staff_context_id %>
+  </div>
+  <div class="field">
+    <%= f.label :notes %><br />
+    <%= f.text_area :notes %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,13 @@
+<p class="address_fields">
+	<fieldset>
+		<div class="field">
+			<%= f.label :nickname %>
+			<%= f.text_field :nickname, :placeholder => "Optional: Like 'Home' or 'Work'" %>
+&nbsp;&nbsp;
+			<%= f.label :emailAddress %>
+			<%= f.text_field :emailAddress, :size=>60, :placeholder => "Required: email address" %>
+			<%= f.hidden_field :_destroy %>
+			<%= link_to  image_tag("gemicons/trashcan.png"), '#', class: "remove_fields" %>
+		</div>
+	</fieldset>
+</p>

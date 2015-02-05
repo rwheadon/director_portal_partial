@@ -1,0 +1,38 @@
+<%= form_for(@person_medical_note) do |f| %>
+<script type="text/javascript">
+	$("div").remove("#cssMenu1");
+</script>
+  <% if @person_medical_note.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@person_medical_note.errors.count, "error") %> prohibited this reservation from being saved:</h2>
+
+      <ul>
+      <% @person_medical_note.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+	<div>
+	  <b>Medical Note for:</b>
+	  <%= @person_medical_note.person.fullname %>
+	</div>
+	
+	<div>
+		Use the field below to make notes to this person's record. Medical Notes cannot be edited once saved.
+	</div>
+	<fieldset>
+		<div>
+			<%= f.text_area :notes %>
+		</div>
+	</fieldset>
+
+	<div class="actions">
+	<br/><br/>
+	<%= f.submit "Save this Medical Note"%>
+	</div>
+	
+	<%= f.hidden_field :created_by, :value => current_user.id %>
+	<%= f.hidden_field :person_id, :value => @person_medical_note.person.id %>
+<% end %>

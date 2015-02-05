@@ -1,0 +1,7 @@
+<p class="reservation_resource_fields">
+	<fieldset><legend>Cabin</legend>
+			<%= f.collection_select(:resource_id, Resource.where(:resourcetype => 'Cabin'), :id, :name) %> 
+				<%= f.hidden_field :_destroy %>
+				<%= link_to  image_tag("gemicons/trashcan.png"), '#', class: "remove_fields" %>
+	</fieldset>
+</p>

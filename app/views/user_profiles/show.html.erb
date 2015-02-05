@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @user_profile.user_id %>
+</p>
+
+<p>
+  <b>Is active:</b>
+  <%= @user_profile.is_active %>
+</p>
+
+<p>
+  <b>Is deleted:</b>
+  <%= @user_profile.is_deleted %>
+</p>
+
+<p>
+  <b>Firstname:</b>
+  <%= @user_profile.firstname %>
+</p>
+
+<p>
+  <b>Lastname:</b>
+  <%= @user_profile.lastname %>
+</p>
+
+<% if current_user.role? :admin %>
+	<p>
+	  <b>Staff context:</b>
+	  <%= @user_profile.staff_context_id %>
+	</p>
+<% end %>
+
+<p>
+  <b>Notes:</b>
+  <%= @user_profile.notes %>
+</p>
+
+
+<%= link_to 'Edit', edit_user_profile_path(@user_profile) %> |
+<%= link_to 'Back', user_profiles_path %>

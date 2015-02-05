@@ -1,0 +1,75 @@
+<!-- p id="notice"><%= notice %></p -->
+<br/>
+<% @invoice_items_all_clear = true %>
+<% ReservationCart.where( :invoice_id => @invoice.id ).each do |rcok| %>
+	<% if rcok.reservation.event.locked==true %>
+		<% @invoice_items_all_clear = false %>
+	<% end %>
+<% end %>
+<% @show_certain_links = (@invoice.status == 'new' and ( @invoice.payment_total <= 0 )  ) %>
+<h1><%= @invoice.reservation_carts.first.status.titleize %> Invoice</h1>
+	<table class="invoice_data">
+		<tr>
+		<th>Reservation Event</th>
+		<th>Registrant</th>
+		<th>Status</th>
+		<th>Reference code</th>
+		<th>Event Price</th>
+		</tr>
+		<% @total_amount = 0 %>
+		<% @total_discount = 0 %>
+		
+		<% @stub_id = 0 %>
+		<% ReservationCart.where( :invoice_id => @invoice.id ).each do |rescart| %>
+		<% @total_amount = @total_amount + rescart.reservation.event.price %>
+		<tr>
+			<td><%= link_to rescart.reservation.event.eventname, rescart.reservation %><% if rescart.reservation.event.locked %><b>(Sold Out)</b><% end %></td>
+			<td><%= rescart.reservation.person.fullname  %> </td>
+			<td><%= rescart.status %></td>
+			<td><%= rescart.reference_code %></td>
+			<td align="right"><%= number_to_currency(rescart.reservation.event.price) %></td>
+		</tr>
+		<tr>
+		</tr>
+	<% end %>
+	<% if @invoice.status=='paid' or @invoice.status=='balancedue' %>
+		<% if @invoice.paid_subtotal.nil? or @invoice.paid_discount_total.nil? or @invoice.paid_total_balance.nil? %>
+			<% @total_discount = @invoice.discount_total %>	
+			<% @invoice_total = @total_amount - @total_discount %>
+		<% else %>
+			<% @total_amount = @invoice.paid_subtotal %>
+			<% @total_discount = @invoice.paid_discount_total %>
+			<% @invoice_total = @invoice.paid_total_balance %>
+		<% end %>
+
+	<% else %>
+		<% @total_discount = @invoice.discount_total %>	
+		<% @invoice_total = @total_amount - @total_discount %>
+	<% end %>
+	<% @payments_made = @invoice.payment_total %>
+	<% @amount_due = @invoice_total - @payments_made %>
+		<tr><td colspan="4" align="right"><b>Discounts Applied</b></td><td align="right"> <%= number_to_currency(-@total_discount) %> </td></tr>
+		<tr><td colspan="4" align="right"><b>Invoice Total</b></td><td align="right"><%=number_to_currency(@invoice_total)  %></td></tr>
+		<% unless @payments_made == 0.00 %>
+		<tr><td colspan="4" align="right"><b>Less Payments*</b></td><td align="right"><%= number_to_currency(-@payments_made)  %></td></tr>
+		<tr><td colspan="4" align="right"><b>Amount Due</b></td><td align="right"><%=number_to_currency(@amount_due)  %></td></tr>	
+		<% end %>	
+	</table>
+	* see payment history table for details
+<br/><br/>
+	<div>
+		<p>
+	<% unless @invoice.user_coupon_code.blank? %>
+		You have applied a coupon to this invoice : <b><%= "#{@invoice.user_coupon_code}"%></b>
+	<% end %>
+		</p>
+	</div>
+
+
+<%= render 'transaction_history' %>
+
+
+<!-- 
+<%= link_to 'Edit', edit_invoice_path(@invoice) %> |
+<%= link_to 'Back', invoices_path %>
+-->

@@ -1,0 +1,50 @@
+
+<div>
+<% if @invoice.payment_notifications.count > 0 %>
+<h2>Online Transaction History:</h2>
+<table class="invoice_data">
+	<th>Transaction ID</th>
+	<th>Status</th>
+	<th>Card Hint</th>
+	<th>Expire Info</th>
+	<th>Total Charged</th>
+	<th>Processed Date</th>
+	<th>Txn Notes</th>
+	<% @invoice.payment_notifications.each do |pn| %>
+		<tr>
+			<td><%= "#{pn.transaction_id}" %></td>
+			<td><%= "#{pn.params[:status]}" %></td>
+			<td><%= "#{pn.params[:cardnumber]}" %></td>
+			<td><%= "#{pn.params[:expmonth]}/#{pn.params[:expyear]}" %></td>
+			<td><%= "#{pn.params[:chargetotal]}"%></td>
+			<td><%= "#{pn.params[:txndate_processed]}"%></td>
+			<td><%= "#{pn.params[:comments]}"%></td>
+		</tr>
+	<% end %>	
+</table>
+<% end %>
+<br/>
+<% if @invoice.payments.count > 0 %>
+<h2>Payment History</h2>
+<table class="invoice_data">
+	<th>Transaction ID</th>
+	<th>Status</th>
+	<th>Payment Method</th>
+	<th>Reference Info.</th>
+	<th>Payment Amount</th>
+	<% @invoice.payments.each do |ip| %>
+		<% @ref_hash =Hash['chk','Check', 'cash','Cash'] %>
+		<% @match_node = @ref_hash.assoc(ip.payment_method) %>
+		<tr>
+			<td><%= "#{ip.transid}" %></td>
+			<td><%= "#{ip.status}" %></td>
+			<td><%= "#{if @match_node.nil? then ip.payment_method else @ref_hash.assoc(ip.payment_method)[1] end }" %></td>
+			<td><%= "#{ip.refcode}" %></td>
+			<td align="right"><%= "#{ip.payment_amount}"%></td>
+		</tr>
+	<% end %>
+	
+	<tr><td colspan="4" class="line-total" align="right"><b>Payment_total</b></td><td align="right"><%= "#{"%.2f" % (@invoice.payment_total)}" %></td></tr>	
+</table>
+<% end %>
+</div>

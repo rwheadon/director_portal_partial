@@ -1,0 +1,15 @@
+<p class="person_allergy_fields">
+	<fieldset>
+		<div class="field">
+			<%= f.label "Type:" %>
+		    <%= f.select :allergy_type, ['Medicine','Food','Other'] %>
+			<%= f.label "Allergy" %>
+			<%= f.text_field :allergyname %>
+&nbsp;&nbsp;
+			<%= f.label "Details" %>
+			<%= f.text_field :notes, :size=>60 %>
+			<%= f.hidden_field :_destroy %>
+			<%= link_to  image_tag("gemicons/trashcan.png"), '#', class: "remove_fields" %>
+		</div>
+	</fieldset>
+</p>

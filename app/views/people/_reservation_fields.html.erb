@@ -1,0 +1,26 @@
+<p class="reservation_fields">
+	<fieldset>
+		<fieldset><legend>Event</legend>
+		<%= f.collection_select(:event_id, Event.all, :id, :event_with_dates ) %>
+		</fieldset>
+		
+		<!-- <fieldset><legend>Resource</legend>
+			<%= f.fields_for :reservation_resources do |builder| %>
+				<%= render "reservation_resource_fields", f: builder %>
+			<% end %>
+			<%= link_to_add_fields "Add Cabin", f, :reservation_resources %>			
+		</fieldset>	 -->		
+		
+		  <!-- <p class="field">
+		    <%= f.label :is_staffing %><br />
+		    <%= f.check_box :is_staffing %>
+		  </p> -->
+		  <!-- <p class="field">
+		    <%= f.label :notes %><br />
+		    <%= f.text_area :notes, :rows=>4, :cols=>100%>
+		  </p> -->
+		
+			<%= f.hidden_field :_destroy %>
+			<%= link_to  image_tag("gemicons/trashcan.png"), '#', class: "remove_fields" %>
+	</fieldset>
+</p>

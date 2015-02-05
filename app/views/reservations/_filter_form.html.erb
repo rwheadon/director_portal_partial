@@ -1,0 +1,7 @@
+<%= form_tag 'reservations_filter', :id=>'reg_filter_form' do %>
+<div class="field" id="reservations_view_filter">
+	Filter by: <%= select("reservation","event", Event.all.sort_by{|i| i[:date_begin]}.reverse.collect {|e|["#{e.date_begin.to_date.strftime("%m/%d/%Y")} - #{e.eventname}", e.id]}, {:selected => 2, :include_blank=>"All"}) %> <%= submit_tag "Filter" %>
+	
+	<!-- Event.all.collect.sort_by{|i| i[:date_begin]}.reverse {|e|[e.eventname, e.id]} -->
+</div>
+<% end %>

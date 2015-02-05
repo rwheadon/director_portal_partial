@@ -1,0 +1,162 @@
+<p id="notice"><%= notice %></p>
+<!-- %= link_to 'Back to Person Listing', people_path %><br/><br/ -->
+<h1><%= @person.fullname %></h1>
+
+<%= render 'person_progress' %>
+<div id="persontabs">
+    <div id="fragment-1">
+		<fieldset><legend><b>Camper Information</b></legend>
+			<fieldset><legend><b><%= @person.firstname %>&nbsp;<%= @person.lastname %>&nbsp;(<%= @person.nickname %>)</b></legend>
+				<p>
+				  <b>Firstname:</b>
+				  <%= @person.firstname %>
+				&nbsp;&nbsp;
+				  <b>Lastname:</b>
+				  <%= @person.lastname %>
+				&nbsp;&nbsp;
+				  <b>Middleinit:</b>
+				  <%= @person.middleinit %>
+				&nbsp;&nbsp;
+				  <b>Nickname:</b>
+				  <%= @person.nickname %>
+				</p>
+
+				<p>
+				  <b>Birthdate:</b>
+				  <%= @person.birthdate.strftime("%m/%d/%Y") %>
+				&nbsp;&nbsp;
+				  <b>Gender:</b>
+				  <%= @person.gender %>
+				&nbsp;&nbsp;
+					<b>Shirt Size:</b>
+					<%= @person.shirtsize %>
+				</p>
+			</fieldset>
+			<br/>
+			<fieldset><legend><b>Address Information</b></legend>
+				<% for address in @person.addresses %>
+					<fieldset>
+						<b>Street Address Line 1:</b> <%= address.Street1 %><br/>
+						<% unless address.Street2.blank? %><b>Street Address Line 2:</b> <%= address.Street2 %><br/> <% end %>
+						<% unless address.Street3.blank? %><b>Street Address Line 3:</b> <%= address.Street3 %><br/> <% end %>
+						<b>City, State Zipcode:</b> <%= address.City %>,
+						  <%= address.State %>&nbsp;&nbsp;
+						  <%= address.zipcode %><br/><br/>
+						<i><%= address.notes %></i><br/>
+					</fieldset>
+				<% end %>
+			</fieldset>
+			<fieldset><legend><b>Email</b></legend>
+				<% for email in @person.emails %>
+					<fieldset>
+						Nickname: <b><%= email.nickname %></b>&nbsp;&nbsp;&nbsp;Email Address: <b><%= email.emailAddress %></b>
+					</fieldset>
+				<% end %>
+			</fieldset>
+			<br/><br/>
+			<fieldset><legend><b>Organization Information</b></legend>
+				<% for organization in @person.organizations %>
+					<fieldset>
+						Church/Organization: <b><%= organization.name %></b>
+					</fieldset>
+				<% end %>	
+			</fieldset>
+			<br/><br/>
+			<fieldset><legend><b>Camp Media Permission</b></legend>
+				<% if !@person.forbid_photos %>
+					<p class="media_ok">
+				  		Promotional Photos Allowed.
+					</p>
+				<% else %>
+					<p class="media_forbidden">
+						<b>I DO NOT give permission for my child’s image (either by video or photograph) to be
+						used in any manner by Atlanta Bible Camp for promotional or informational purposes.</b>
+					</p>
+				<% end %>
+			</fieldset>
+		</fieldset>
+    </div>
+<br/><br/>
+    <div id="fragment-2">
+		<fieldset><legend><b>Contact Information</b></legend>
+			<% for simplecontact in @person.simple_contacts %>
+			<br/><fieldset>
+				<legend>
+					<b><%= simplecontact.firstname %>&nbsp;<%= simplecontact.lastname %> - <%= simplecontact.contacttype %></b>
+				</legend>
+				<p class="simplecontact_details">
+				<b>Relationship:</b> <%= simplecontact.relationship %><br/>
+				<% for scphone in simplecontact.simple_contact_phones %>
+					 <b>Phone: (<%= scphone.scphonetype %>) Phone:</b> <%= number_to_phone(scphone.scphonenumber) %><br/>
+				<% end %>
+				<% leading_br="" %>
+				<% for scemail in simplecontact.simple_contact_emails %>
+					 <%= leading_br %><b>Email: (<%= scemail.nickname %>) Address:</b> <%= scemail.emailaddress %>
+					<% leading_br = "<br/>"%>
+				<% end %>
+				</p>
+				<% for scins in simplecontact.simple_contact_insurances %>
+					<fieldset class="insurance_info">
+						<legend>Insurance: <%= scins.provider %><%= if scins.is_primary==true then " - Primary Insurance Provider" end %></legend>
+					<b>Employer:</b> <%= scins.employer %> <br/>
+					<b>Policy Number:</b> <%= scins.policynumber %><br/>
+					<b>Group Name:</b> <%= scins.groupname %><br/>
+					<b>Group Number:</b> <%= scins.groupnumber %>
+					</fieldset>
+				<% end %>
+				</fieldset>
+			<% end %>	
+		</fieldset>
+    </div>
+<br/><br/>
+    <div id="fragment-3">
+		<fieldset><legend><b>Medical Information</b></legend>
+			<fieldset class="medlist"><legend class="legend_secondary">Medications</legend>
+				<div>
+				<% if @person.allow_tylenol==true %><br /><b>Med:</b> Tylenol (Allowed)<% end %>
+				<% if @person.allow_sudafed==true %><br /><b>Med:</b> Sudafed (Allowed)<% end %>
+				<% if @person.allow_ibuprofin==true %><br /><b>Med:</b> Ibuprofin (Allowed)<% end %>
+				<% if @person.allow_mylanta==true %><br /><b>Med:</b> Mylanta (Allowed)<% end %>
+				<% if @person.allow_cough_medicine==true %><br /><b>Med:</b> Cough Medicine (Allowed)<% end %>
+				<% if @person.allow_benadryl==true %><br /><b>Med:</b> Benadryl (Allowed)<% end %>
+				<% alt_med_count = 0 %>
+				<% for meds in @person.person_medications %>
+					<% alt_med_count += 1 %>
+					 <br /><b><%= alt_med_count %>. Med: <%= meds.medicationname %> (<%= meds.medication_type %>)</b> - Notes: <%= meds.notes %> 
+				<% end %>
+				</div>
+			</fieldset>
+			<fieldset class="medlist"><legend class="legend_secondary">Allergies</legend>
+				<% for allergy in @person.person_allergies %>
+					<fieldset>
+					 <b>Allergy: <%= allergy.allergyname %></b> - Notes: <%= allergy.notes %>
+					</fieldset>
+				<% end %>		
+			</fieldset>
+			<fieldset class="medlist"><legend class="legend_secondary">Medical Notes (Newest First)</legend>
+				<% for mednotes in @person.person_medical_notes.order("person_medical_notes.created_at DESC") %>
+					<fieldset><legend class="legend_noteheader"></legend>
+					<b>On <%= mednotes.created_at.localtime.to_formatted_s(:long) %> <%= mednotes.created_by_name %> entered </b>
+					 <div><%= simple_format mednotes.notes %></div>
+					<br/>
+					</fieldset>
+				<% end %>		
+			</fieldset>
+			<% if current_user.role? :nurse or current_user.role? :director %>
+				<%= link_to "Add a Medical Note", {:controller=>"person_medical_notes", :action=>"new", :person=>@person}, :method=>"get" %>
+			<% end %>
+			</div>
+		</fieldset>
+    </div>
+<br/><br/><br/>
+</div>
+
+<p>
+	  <b>Date created:</b>
+	  <%= @person.created_at %>
+	</p>
+	<!-- p>
+		<%= link_to 'Back to Person Listing', people_path %>
+	</p -->
+
+

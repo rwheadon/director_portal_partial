@@ -1,0 +1,86 @@
+
+<% if @reservations.empty? %>
+
+	<h2> You haven't made any reservations yet </h2>
+
+<% else %>
+	<table id="reservations_index" class="display">
+		<thead>
+		  <tr>
+		    <th>Person</th>
+		    <th>Registered Event</th>
+			<th>Dates</th>
+			<th>Checked In?</th>
+			<th>Cabin</th>
+			<th>Gender</th>
+		    <th>Age at Event</th>
+			<th>Price</th>
+			<th>Status</th>
+		  </tr>
+		</thead>
+		<tbody>
+			<% @reservations.each do |reservation| %>
+				<% 
+				@readable_age_at_event = distance_of_time_in_words(reservation.person.birthdate, reservation.event.date_begin.to_date) 
+				@event_date = reservation.event.date_begin.to_date
+				@person_birthdate = reservation.person.birthdate
+				@age_at_event = @event_date.year - @person_birthdate.year - ((@event_date.month > @person_birthdate.month || (@event_date.month == @person_birthdate.month && @event_date.day >= @person_birthdate.day)) ? 0 : 1)
+				@age_cell_contents = @age_at_event >= 9 ? "#{@readable_age_at_event}" : "#{@readable_age_at_event} (#{@person_birthdate})" 
+				%>
+				<% unless reservation.is_deleted %>
+				  <tr>
+				    <td><%= reservation.person.firstname %> <%= reservation.person.lastname %> 
+					<% unless reservation.person.nickname.blank? %>
+					(<%= reservation.person.nickname %>)
+					<% end %></td>
+				    <td><%= link_to reservation.event.eventname, reservation %></td>
+					<td><%= reservation.event.event_dates%></td>
+					
+					
+					<td>
+						<% if reservation.checked_in==true %>
+							Checked In
+						<% elsif reservation.reservation_cart && reservation.reservation_cart.invoice && reservation.reservation_cart.invoice.status=='paid' && !(reservation.cabin_id.blank?) && reservation.event.id==2 %>
+							<%= link_to "CHECK IN", {:controller=>"reservations", :action=>"check_in_reservation", :id=>reservation.id}, :method=>"post" %>
+						<% end %>		
+					</td>
+					
+					
+					<% if reservation.cabin_id.blank? or reservation.cabin_id.nil? %>
+					<% @cabin = "" %>
+					<% else %>
+					<% @cabin = Resource.find( reservation.cabin_id ).name %>
+					<% end %>
+					<% @cabin_first = reservation.resources.first.nil? ? "" : reservation.resources.first.name %>
+					<td><% unless @cabin.nil? %><%= "#{@cabin}" %><% end %></td>
+					<td><%= reservation.person.gender %></td>
+				    <td><%= @age_at_event %></td>
+					<td>
+					<% if reservation.reservation_cart.try(:status)=='paid' %>
+						<% if reservation.reservation_cart.invoice.paid_subtotal.nil? or reservation.reservation_cart.invoice.paid_discount_total.nil? or reservation.reservation_cart.invoice.paid_total_balance.nil? %>
+							<%= reservation.reservation_cart.invoice.total_balance %>
+						<% else %>
+							<%= reservation.reservation_cart.invoice.paid_total_balance %>
+						<% end %>
+					<% else %>
+						<%= number_to_currency(reservation.event.price) %>
+					<% end %>
+					</td>
+					<% if reservation.reservation_cart.try(:status) == 'new'%>
+						<td>Added to cart</td>
+					<% else %>
+						<% if reservation.reservation_cart.nil? && reservation.is_purchasable?!=true %>
+							<td>Expired</td>
+						<% elsif reservation.reservation_cart.nil? %>
+							<td>New</td>
+						<% else %>
+							<td><%= reservation.reservation_cart.try(:status) %></td>
+						<% end %>
+					<% end %> <!-- end reservation_cart.try -->
+				  </tr>
+				<% end #end reservation.isdeleted %>
+			<% end #end reservations  %>
+		</tbody>
+	</table>
+<% end %>
+<br />

@@ -1,0 +1,39 @@
+<p class="simple_contact_insurance_fields">
+	<fieldset>
+		<div class="field">
+			<table id="insurance_grid">
+			<tr>
+				<td></td>
+				<td><%= f.check_box :is_primary %> &nbsp;<b>Check here if insurance is primary.</b></td>
+			</tr>
+			<tr>
+			<td><%= f.label "Provider", :size=>50 %></td>
+			<td><%= f.text_field :provider, :size=>60, :placeholder => "Required: Insurance Provider" %></td>
+			</tr>
+			<tr>
+			<td><%= f.label "Employer" %></td>
+			<td><%= f.text_field :employer, :size=>60, :placeholder => "Required: Employer Insurance is through" %></td>
+			</tr>
+			<tr>
+			<td><%= f.label "Policy Number" %></td>
+			<td><%= f.text_field :policynumber, :size=>60, :placeholder => "Required: Policy Number on card" %></td>
+			</tr>
+			<tr>
+			<td><%= f.label "Group Name" %></td>
+			<td><%= f.text_field :groupname, :size=>60, :placeholder => "Required: Group Name on card" %></td>
+			</tr>	
+			<tr>
+			<td><%= f.label "Group Number" %></td>
+			<td><%= f.text_field :groupnumber, :size=>60, :placeholder => "Required: Group Number on card" %></td>
+			</tr>
+			<!-- <tr>
+				<td><%= f.label "Insurance Notes" %></td>
+				<td><%= f.text_area :notes, "rows"=>4, "cols"=>97 %></td>
+			</tr> -->
+			</table>
+			<%= f.hidden_field :_destroy %>
+			<%= link_to "Remove Insurance", '#', class: "remove_fields" %>
+			
+		</div>
+	</fieldset>
+</p>

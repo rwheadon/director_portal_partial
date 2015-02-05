@@ -1,0 +1,14 @@
+<p class="person_medication_fields">
+	<fieldset>
+		<div class="field">
+			<%= f.label "Type:" %>
+	    	<%= f.select :medication_type, ['Allowed','Required'] %>
+			<%= f.label "Medication" %>
+			<%= f.text_field :medicationname %><br />
+			<%= f.label "Details" %>
+			<%= f.text_field :notes, :size=>60 %>
+			<%= f.hidden_field :_destroy %>
+			<%= link_to  image_tag("gemicons/trashcan.png"), '#', class: "remove_fields" %>
+		</div>
+	</fieldset>
+</p>

@@ -1,0 +1,84 @@
+<%= form_for(@reservation) do |f| %>
+<script type="text/javascript">
+	$("div").remove("#cssMenu1");
+</script>
+  <% if @reservation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@reservation.errors.count, "error") %> prohibited this reservation from being saved:</h2>
+
+      <ul>
+      <% @reservation.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- <div class="field">
+    <%= f.label :person_id %><br />
+    <%= f.number_field :person_id %>
+  </div>
+  <div class="field">
+    <%= f.label :event_id %><br />
+    <%= f.number_field :event_id %>
+  </div> -->
+
+	<div>
+	  <b>Person:</b>
+	  <%= @reservation.person.fullname %>
+	</div>
+
+<b>Cabin Status:</b><br/>
+	<% @cabins = Resource.where('resourcetype = ? ', 'Cabin') %>
+	<% @available_cabins = Array.new %>
+	<% @available_cabin_ids = Array.new %>
+	<% @cabins.each do |c| %>
+		<% used_num = Reservation.where('event_id = ?', @reservation.event.id ).where('cabin_id = ?', c.id ).count %>
+		<%= "#{c.name} has used #{used_num} of a possible #{c.occupancy} reservations." %><br/>
+		<% if used_num < c.occupancy %>
+			<% @available_cabins <<  c %>
+			<% @available_cabin_ids << c.id %>
+		<% end %>	
+	<% end %>
+	<br/>
+	
+	<div>
+	  <b>Event:</b>
+	  <%= @reservation.event.eventname %> ( )
+	 <br/><%= @reservation.event.notes%>
+	</div>
+		
+	<b>Cabin Assignment</b>
+	 <div class="field">
+		<% if  @available_cabins.size > 0 %>
+			<% @dynamic_arry %>
+			<%= f.collection_select(:cabin_id, Resource.where('id in (?)',  @available_cabin_ids), :id, :name, {:include_blank=>"Select a Cabin"} ) %>
+		<% else %>
+			There are no cabins with space.
+		<% end %>
+	 </div>
+	<div>
+		<b>Check In:</b> <%= f.check_box :checked_in %>
+	</div>	
+
+
+	<div>	
+	<% unless ReservationCart.find_by_reservation_id(@reservation.id).nil? %>
+		<br/>This reservation is 
+		<% if @reservation.reservation_cart.status == 'new' %>
+			in your cart
+		<% else %>
+		    <%= "#{@reservation.reservation_cart.status}" %> 
+		<% end %>
+	<% end %>
+	</div>
+	<!-- <div class="field">
+		<b>Price:</b> 
+		<%= number_to_currency(@reservation.event.price) %>
+	</div> -->
+
+	<div class="actions">
+	<br/><br/>
+	<%= f.submit %>
+	</div>
+<% end %>

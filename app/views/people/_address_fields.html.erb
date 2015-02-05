@@ -1,0 +1,31 @@
+<p class="address_fields">
+<fieldset>	
+	<div class="field">
+	  <%= f.label :Street1 %><br />
+	  <%= f.text_field :Street1, :size => 100, :placeholder => "Required: Street Address Line 1" %>
+	</div>
+	<div class="field">
+	  <%= f.label :Street2 %><br />
+	  <%= f.text_field :Street2, :size => 100, :placeholder => "Optional" %>
+	</div>
+	<div class="field">
+	  <%= f.label :Street3 %><br />
+	  <%= f.text_field :Street3, :size => 100, :placeholder => "Optional" %>
+	</div>
+	<div class="field">
+	  <%= f.label :City %>
+	  <%= f.text_field :City, :placeholder => "Required: City" %>&nbsp;&nbsp; 
+	  <%= f.label :State %>
+	<%= f.select :State, ['AK','AL','AR','AZ','CA','CO','CT','DC','DE','FL','GA','HI','IA','ID','IL','IN','KS','KY','LA','MA','MD','ME','MI','MN','MO','MS','MT','NC','ND','NE','NH','NJ','NM','NV','NY','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VA','VT','WA','WI','WV','WY'],
+				:include_blank => true %>
+	  <%= f.label :zipcode %>
+	  <%= f.text_field :zipcode, :placeholder => "Required: Zipcode" %>
+	</div>
+	<!-- <div class="field">
+	  <%= f.label :notes %><br />
+	  <%= f.text_area :notes, "rows"=>10, "cols"=>97 %>
+	</div> -->
+	<%= f.hidden_field :_destroy %>
+	<!-- %= link_to "remove", '#', class: "remove_fields" % -->	
+</fieldset>
+</p>

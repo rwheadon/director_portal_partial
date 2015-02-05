@@ -1,0 +1,13 @@
+<p class="person_medical_note_fields">
+	<fieldset>
+		<div class="field">
+			<%= f.label "Notes" %>
+				<%= f.text_area :notes, "rows"=>10, "cols"=>100 %>
+			<%= f.hidden_field :_destroy %>
+			<%= f.hidden_field :created_by, :value => current_user.id %>
+			<!-- % if current_user.role? :admin % -->
+			<%= link_to  image_tag("gemicons/trashcan.png"), '#', class: "remove_fields" %>
+			<!-- % end % -->
+		</div>
+	</fieldset>
+</p>

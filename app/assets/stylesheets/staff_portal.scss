@@ -1,0 +1,39 @@
+//= require bootstrap_and_overrides
+.insurance_info {
+	padding-left: 50px;
+	
+}
+
+.legend_secondary {
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+.legend_noteheader {
+	font-size: 1.2em;
+	font-weight: normal;
+}
+
+.medlist {
+	padding-left: 50px;
+}
+
+.media_forbidden {
+	color: red;
+}
+
+.media_ok {
+	color: green;
+}
+
+.simplecontact_details {
+	padding-left: 50px;
+}
+
+.read_only_field {
+	padding-bottom: 10px;
+}
+
+.field, textarea {
+	width: 650px;
+}

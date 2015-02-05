@@ -1,0 +1,13 @@
+<p class="simple_contact_email_fields">
+	<fieldset>
+		<div class="field">
+			<%= f.label "Nickname" %>
+			<%= f.text_field :nickname, :placeholder => "Friendly Name for email" %>
+&nbsp;&nbsp;
+			<%= f.label "Email Address" %>
+			<%= f.text_field :emailaddress, :size=>60, :placeholder => "email address" %>
+			<%= f.hidden_field :_destroy %>
+			<%= link_to image_tag("gemicons/trashcan.png"), '#', class: "remove_fields" %>
+		</div>
+	</fieldset>
+</p>

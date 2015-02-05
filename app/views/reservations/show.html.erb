@@ -1,0 +1,73 @@
+<h1>Reservation for  <%= @reservation.person.fullname %></h1>
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Person:</b>
+  <%= @reservation.person.fullname %>
+</p>
+
+<p>
+  <b>Event:</b>
+	<%= @reservation.event.eventname %> (<%= @reservation.event.event_dates%>)<br/>
+	
+	<%= @reservation.event.notes%>
+</p>
+
+<p>
+	<b>Cabin Assignment:</b>
+	<% if @reservation.cabin_id and @reservation.cabin_id > 0 %>
+		<% @cabin = Resource.where('id = ?', @reservation.cabin_id ).first %>
+		<%= @cabin.name %>
+	<% else %>	
+		Unassigned
+	<% end %>
+</p>
+
+<p>
+	<b>Checked In:</b> <% if @reservation.checked_in==true %>Yes<% else %>No<% end %>
+
+<p>
+<% if ReservationCart.find_by_reservation_id(@reservation.id).nil? %>
+	<br/>This reservation has not been transacted. (No cart, No invoice)
+<% else %>
+	<br/>This reservation is 
+	<% if @reservation.reservation_cart.status == 'new' %>
+		in your cart
+	<% else %>
+	    <b><%= "#{@reservation.reservation_cart.status}" %></b> 
+		- See Invoice 	<%= link_to @reservation.reservation_cart.invoice.reference_code, @reservation.reservation_cart.invoice %> for more information.
+	<% end %>
+	
+<% end %>
+</p>
+<!-- <p>
+  <b>Is deleted:</b>
+  <%= @reservation.is_deleted %>
+</p>
+
+<p>
+  <b>Is staffing:</b>
+  <%= @reservation.is_staffing %>
+</p> -->
+
+<!-- <p>
+  <b>Notes:</b>
+  <%= @reservation.notes %>
+</p> -->
+
+<!-- <p>
+  <b>Discount:</b>
+  <%= @reservation.discount %>
+</p> -->
+
+<!-- <p>
+  <b>Amountpaid:</b>
+  <%= @reservation.amountpaid %>
+</p> -->
+
+<% if @reservation.reservation_cart && @reservation.reservation_cart.invoice && @reservation.reservation_cart.invoice.status=='paid' %>
+	<%= link_to 'Edit', edit_reservation_path(@reservation) %> |
+<% end %>
+
+<%= link_to 'Back to Reservation List', reservations_path %>
+<br/><br/>
